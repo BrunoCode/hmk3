@@ -33,7 +33,7 @@ window.onload = function() {
   socket.on("load", function (data) {
     console.log('data');
     console.log(data);
-    cells = data;
+    cells = data.data;
   });
   function preload () {
     game.load.spritesheet('button', 'play.png', 128, 128);
