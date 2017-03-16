@@ -19,21 +19,37 @@ window.onload = function() {
   var savebutton = document.getElementById("save");
   var loadbutton = document.getElementById("load");
   savebutton.onclick = function(){
+    run = 0;
     console.log('save');
     console.log('username:'+ username.value);
     console.log('statename:'+field.value);
     socket.emit('save', {studentname:username.value, statename:field.value, data:cells});
   };
   loadbutton.onclick= function() {
+    run = 0;
     console.log('load');
     console.log('username:'+ username.value);
     console.log('statename:'+field.value);
     socket.emit('load',{studentname:username.value,statename:field.value});
   }
   socket.on("load", function (data) {
+    run = 0;
     console.log('data');
     console.log(data);
     cells = data.data;
+    graphics.lineStyle(2, 0xe0e0e0, 1);
+
+    for(var i = 0;  i < h; i++){
+      for(var j = 0; j < w; j++){
+        graphics.drawRect(j * cellsize, i * cellsize, cellsize, cellsize);
+        if(cells[i][j].state){
+          graphics.beginFill(0xFF0000, 1);
+          graphics.drawRect(j * cellsize, i * cellsize, cellsize, cellsize);
+          graphics.endFill();
+          graphics.lineStyle(2, 0xe0e0e0, 1);
+        }
+      }
+    }
   });
   function preload () {
     game.load.spritesheet('button', 'play.png', 128, 128);
@@ -76,6 +92,11 @@ window.onload = function() {
   }
   function action(){
     run = !run;
+    if(run){
+      game.stage.backgroundColor = 0xffffff;
+    } else{
+      game.stage.backgroundColor = 0x0000ff;
+    }
   }
 
   function step(){
